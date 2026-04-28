@@ -6,6 +6,7 @@ import parseBody from './src/middlewares/body-parser.js';
 const getRoutes ={
     "/.well-known/openid-configuration": routeHandlers.openidConfigurationHandler,
     "/public-keys": routeHandlers.publicKeysHandler,
+    "/userinfo": routeHandlers.userInfoHandler,
 };
 
 const postRoutes = {

@@ -1,14 +1,26 @@
 import {URL} from 'node:url';
 import * as controllers from './controllers/index.js';
+import { verify } from 'node:crypto';
+import { verifyAccessToken } from './ultils/token.service.js';
+
+// export {
+//     userSignupController,
+//     loginController,
+//     clientSignupController,
+//     authorizeController,
+//     tokenExchangeController,
+//     logoutAllController
+// };
 
 export async function userSignupHandler(req,res){
     const {name, email, password} = req.body;
     try{
-        await controllers.signUpController(name,email,password);
+        await controllers.userSignupController(name,email,password);
         res.writeHead(201);
         return res.end(JSON.stringify({message: "User signup successful"}));
     }catch(err){
         res.writeHead(400);
+        console.error("Error in user signup:", err);
         return res.end(JSON.stringify({message: err.message}));
     }
 }
@@ -24,6 +36,7 @@ export async function loginHandler(req,res){
         res.writeHead(200);
         return res.end(JSON.stringify({message: "Login successful"}));
     }catch(err){
+        console.error("Error in login:", err);
         res.writeHead(400);
         return res.end(JSON.stringify({message: err.message}));
     }
@@ -36,6 +49,7 @@ export async function clientSignupHandler(req,res){
     res.writeHead(201);
     return res.end(JSON.stringify({message: "Client SignUp Successful", client_id, client_secret}));
     }catch(err){
+        console.error("Error in client signup:", err);
         res.writeHead(400);
         return res.end(JSON.stringify({message: err.message}));
     }
@@ -50,6 +64,7 @@ export async function authorizeHandler(req,res){
     });
     return res.end();
     } catch (error) {
+        console.error("Error in authorization:", error);
         res.writeHead(400);
         return res.end(JSON.stringify({message: error.message}));
     }
@@ -62,6 +77,7 @@ export async function tokenExchangeHandler(req,res){
         res.writeHead(200);
         return res.end(JSON.stringify({access_token}));
     }catch(err){
+        console.error("Error in token exchange:", err);
         res.writeHead(400);
         return res.end(JSON.stringify({message: err.message}));
     }
@@ -98,6 +114,7 @@ export async function logoutAllHandler(req,res){
     res.writeHead(200);
     return res.end(JSON.stringify({message: "Logout from all sessions successful"}));
     } catch (error) {
+        console.error("Error in token exchange:", err);
         res.writeHead(400);
         return res.end(JSON.stringify({message: error.message}));
     }
@@ -129,4 +146,34 @@ export async function jwksHandler(req,res){
     };
     res.writeHead(200);
     return res.end(JSON.stringify({keys: [jwk]}));
+}
+
+export async function userInfoHandler(req, res) {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            res.writeHead(401);
+            return res.end(JSON.stringify({ message: "Unauthorized" }));
+        }
+
+        const token = authHeader.split(" ")[1];
+
+        const payload = verifyAccessToken(token);
+
+        // Return only user-related claims
+        const userInfo = {
+            sub: payload.sub,
+            email: payload.email,
+            name: payload.name
+        };
+
+        res.writeHead(200);
+        return res.end(JSON.stringify(userInfo));
+
+    } catch (err) {
+        console.error("Error in user info:", err);
+        res.writeHead(401);
+        return res.end(JSON.stringify({ message: "Unauthorized" }));
+    }
 }

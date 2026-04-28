@@ -26,7 +26,7 @@ export const userSessions = p.pgTable("user_sessions",{
   client_id: p.varchar().notNull().references(() => clients.client_id),
   created_at: p.timestamp().defaultNow(),
   expires_at: p.timestamp().notNull(),
-  status: sessionStatus().notNull().default("active"),
+  status: sessionStatus("status").notNull().default("active"),
 });
 
 export const authorizationCodes = p.pgTable("authorization_codes",{
