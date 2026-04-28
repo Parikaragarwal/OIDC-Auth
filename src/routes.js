@@ -129,6 +129,7 @@ export async function openidConfigurationHandler(req,res){
         jwks_uri: `${issuer}/public-keys`,
         response_types_supported: ["code"],
         subject_types_supported: ["public"],
+        userinfo_endpoint: `${issuer}/userinfo`,
         id_token_signing_alg_values_supported: ["RS256"]
     };
     res.writeHead(200);
