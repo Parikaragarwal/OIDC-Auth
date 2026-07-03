@@ -6,7 +6,7 @@ import path from "node:path";
 import "dotenv/config"
 
 import * as routeHandlers from './src/routes.js';
-import { authLimiter, apiLimiter ,emailLimiter} from './src/middlewares/rateLimiter.js';
+import { authLimiter, apiLimiter, emailLimiter } from './src/middlewares/rateLimiter.js';
 
 const app = express();
 app.set('trust proxy', 1); // Trust Nginx reverse proxy for rate limiting
