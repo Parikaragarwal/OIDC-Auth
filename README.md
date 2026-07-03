@@ -49,5 +49,3 @@ Shomei is built as a microservice architecture orchestrated by Docker Compose:
    added fix for server
 
 Shomei will now be running on `http://localhost:3000` (Frontend) and `http://localhost:3371` (Backend).
-
-
