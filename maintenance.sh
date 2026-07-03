@@ -8,7 +8,6 @@ echo "Removing old images to ensure fresh builds..."
 docker rmi oidc-auth-shomei_frontend oidc-auth-shomei_backend shomei-auth-shomei_frontend shomei-auth-shomei_backend shomei-auth-shomei_postgres shomei-auth-shomei_redis -f || true
 
 echo "Clearing dangling volumes and networks..."
-docker system prune -f
 
 echo "Rebuilding and starting services..."
 docker compose build --no-cache
