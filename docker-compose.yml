@@ -1,25 +1,6 @@
 version: '3.8'
 
 services:
-  shomei_postgres:
-    image: postgres:15
-    container_name: shomei_postgres
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-myuser}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mypassword}
-      POSTGRES_DB: ${POSTGRES_DB:-oidc_db}
-    ports:
-      - "127.0.0.1:5433:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-
-  shomei_redis:
-    image: redis:alpine
-    container_name: shomei_redis
-    ports:
-      - "127.0.0.1:6380:6379"
-    restart: unless-stopped
 
   shomei_backend:
     build:
@@ -30,14 +11,13 @@ services:
       - "127.0.0.1:3371:3371"
       - "127.0.0.1:4983:4983"
     environment:
-      - REDIS_URL=redis://shomei_redis:6379
       - NODE_ENV=production
       - PORT=3371
+    networks:
+        - infra-network
+        - shomei-network
     env_file:
       - .env
-    depends_on:
-      - shomei_postgres
-      - shomei_redis
     restart: unless-stopped
 
   shomei_frontend:
@@ -47,9 +27,14 @@ services:
       args:
         - VITE_API_URL=${VITE_API_URL:-http://localhost:3371}
     container_name: shomei_frontend
+    networks:
+        - shomei-network
     ports:
       - "127.0.0.1:3000:80"
     restart: unless-stopped
 
-volumes:
-  postgres_data:
+networks:
+  infra-network:
+    external: true
+  shomei-network:
+    external: true
