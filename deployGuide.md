@@ -156,3 +156,5 @@ git push origin main
 2. Open the **Actions** tab in your GitHub repository. You will see the `Deploy to VPS` workflow running. It is logging into your server, pulling the code, and running `./maintenance.sh` to build and launch all 4 Docker containers.
 
 3. Wait a minute for the build to finish, and navigate to `https://auth.parikar.in` in your browser. Your completely independent, self-hosted Shomei Auth provider is now live!
+
+Deployment done
