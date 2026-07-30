@@ -178,3 +178,5 @@ When public applications request access, they pass a `code_challenge` and a `cod
 * **Mitigated Account Harvesting Threats**: By enforcing email enumeration countermeasures in forgot-password pathways, automated scans of user bases yield zero usable information.
 * **Immediate Threat Remediation on Reset**: Global session invalidation terminates 100% of active third-party application sessions instantly upon password reset, closing hijacking windows.
 * **Secured Client Sessions**: Access tokens are configured with short 2-day lifespans using asymmetric `RS256` keys. Secure refresh tokens are backed by persistent storage to allow instant client revocation.
+
+  ## Deployment on VPS: https://auth.parikar.in
